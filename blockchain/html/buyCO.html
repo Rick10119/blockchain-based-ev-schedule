@@ -6,20 +6,32 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   </head>
   <p>
-    充电权挂牌
+    购买充电权(选择时段)
   </p>
   <form action="/invoke" method="post">
     <table>
       <tr>
+        <th>属性</th>
+        <th>值</th>
+      </tr>
+      <tr>
         <td>充电权ID：</td>
         <td><input value="" type="text" name="ID_CO"></input></td>
-
-        <td>新车辆ID：</td>
-        <td><input value="" type="text" name="ID_car"></input></td>
-        
-        <input value="delist" type="hidden" name="func"></input>
+        <input value="buyCO" type="hidden" name="func"></input>
       </tr>
-      
+      <tr>
+        <td>车辆ID：</td>
+        <td><input value="" type="text" name="ID_car"></input></td>
+      </tr>
+      <tr>
+        <td>到达时段：</td>
+        <td><input value="" type="text" name="CO_T"></input></td>
+      </tr>
+      <tr>
+        <td>充电时长：</td>
+        <td><input value="" type="text" name="T_charge"></input></td>
+      </tr>
+
       <tr>
         <td><input value=" 确定 " type="submit"></input></td>
       </tr>
