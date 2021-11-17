@@ -1,5 +1,6 @@
-var query = require("./queryExport.js");
-var queryPrice = require("./queryPrice.js");
+var queryCO = require("./queryCO.js");//queryCO
+var queryTime = require("./queryTime.js");
+var queryCS = require("./queryCS.js");
 var queryList = require("./queryList.js");
 var invoke = require("./invokeExport.js");
 var express = require("express");
@@ -19,9 +20,17 @@ app.get('/queryCO', function (request, response) {
   });
 });
 
-app.get('/queryPrice', function (request, response) {
+app.get('/queryTime', function (request, response) {
   response.writeHead(200, { "Content-Type": "text/html" });
-  fs.readFile("html/queryPrice.html", "utf-8", function (e, data) {
+  fs.readFile("html/queryTime.html", "utf-8", function (e, data) {
+    response.write(data);
+    response.end();
+  });
+});
+
+app.get('/queryCS', function (request, response) {
+  response.writeHead(200, { "Content-Type": "text/html" });
+  fs.readFile("html/queryCS.html", "utf-8", function (e, data) {
     response.write(data);
     response.end();
   });
@@ -35,9 +44,9 @@ app.get('/queryList', function (request, response) {
   });
 });
 
-app.get('/buy', function (request, response) {
+app.get('/buyCO', function (request, response) {
   response.writeHead(200, { "Content-Type": "text/html" });
-  fs.readFile("html/buy.html", "utf-8", function (e, data) {
+  fs.readFile("html/buyCO.html", "utf-8", function (e, data) {
     response.write(data);
     response.end();
   });
@@ -90,10 +99,18 @@ app.post('/queryList', function (request, response) {
   });
 });
 
-app.post('/queryPrice', function (request, response) {
+app.post('/queryTime', function (request, response) {
+  T_charge = request.body.T_charge;
+  queryTime.queryTime(T_charge).then((result) => {
+    response.writeHead(200, { 'Content-Type': 'application/json' });
+    response.write(result);
+    response.end();
+  });
+});
+
+app.post('/queryCS', function (request, response) {
   T_arrive = request.body.T_arrive;
-  T_leave = request.body.T_leave;
-  queryPrice.queryPrice(T_arrive, T_leave).then((result) => {
+  queryCS.queryCS(T_arrive).then((result) => {
     response.writeHead(200, { 'Content-Type': 'application/json' });
     response.write(result);
     response.end();
@@ -103,13 +120,12 @@ app.post('/queryPrice', function (request, response) {
 app.post('/invoke', function (request, response) {
   func = request.body.func
   console.log(func)
-  if (func == 'buy') { // to create new co
+  if (func == 'buyCO') { // to create new co
     ID_CO = request.body.ID_CO;
     ID_car = request.body.ID_car;
-    ID_cs = request.body.ID_cs;
-    T_arrive = request.body.T_arrive;
-    T_leave = request.body.T_leave;
-    invoke.invokecc(func, [ID_CO, ID_car, ID_cs, T_arrive, T_leave]).then((result) => {
+    CO_T = request.body.CO_T;
+    T_charge = request.body.T_charge;
+    invoke.invokecc(func, [ID_CO, ID_car, CO_T, T_charge]).then((result) => {
       response.writeHead(200, { 'Content-Type': 'application/json' });
       
       if(result == 200) response.write("Success, CO bought!");
@@ -119,21 +135,6 @@ app.post('/invoke', function (request, response) {
     ID_CO = request.body.ID_CO;
     invoke.invokecc(func, [ID_CO]).then((result) => {
       response.writeHead(200, { 'Content-Type': 'application/json' });
-      if(result == 200) response.write("Success, CO confirmed！");
-      response.end();
-    });
-  } else if (func == 'confirm') {
-    ID_CO = request.body.ID_CO;
-    invoke.invokecc(func, [ID_CO]).then((result) => {
-      response.writeHead(200, { 'Content-Type': 'application/json' });
-      if(result == 200) response.write("Success, CO confirmed！");
-      response.end();
-    });
-  } else if (func == 'confirm') {
-    ID_CO = request.body.ID_CO;
-    invoke.invokecc(func, [ID_CO]).then((result) => {
-      response.writeHead(200, { 'Content-Type': 'application/json' });
-      
       if(result == 200) response.write("Success, CO confirmed！");
       response.end();
     });

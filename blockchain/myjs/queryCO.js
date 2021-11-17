@@ -31,7 +31,7 @@ channel.addPeer(peer);
 var store_path = path.join(__dirname, 'hfc-key-store');
 console.log('Store path:'+store_path);
 
-function queryList() {
+function queryCO(ID_CO) {
 // create the key value store as defined in the fabric-client/config/default.json 'key-value-store' setting
 return Fabric_Client.newDefaultKeyValueStore({ path: store_path
 }).then((state_store) => {
@@ -58,8 +58,8 @@ return Fabric_Client.newDefaultKeyValueStore({ path: store_path
 	const request = {
 		//targets : --- letting this default to the peers assigned to the channel
 		chaincodeId: 'chargingoption',
-		fcn: 'queryList',
-		args: ['']
+		fcn: 'queryCO',
+		args: [ID_CO]
 	};
 
 	// send the query proposal to the peer
@@ -83,6 +83,8 @@ return Fabric_Client.newDefaultKeyValueStore({ path: store_path
 	console.error('Failed to query successfully :: ' + err);
 
 });
+
+
 };
 
-module.exports.queryList = queryList;
+module.exports.queryCO = queryCO;
